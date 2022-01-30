@@ -11,7 +11,9 @@ The refresh token is sent in a cookie which will handle
 the XSS attack problem, however CSRF is still possible. For further securing 
 the refresh token from CSRF attacks, an additional CSRF token
 should be used within a web application scenario, which can then be
-added to the headers in ajax and other requests. 
+added to the headers in ajax and other requests. The refresh tokens are also
+refreshed whenever the access token expires, this makes hacking difficult as
+the refresh tokens are also rotating now.
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
@@ -19,7 +21,9 @@ To run this project, you will need to add the following environment variables to
 `PORT`
 
 `ACCESS_TOKEN_SECRET`
-`ACCESS_TOKEN_LIFE`
-`REFRESH_TOKEN_SECRET`
-`REFRESH_TOKEN_LIFE`
 
+`ACCESS_TOKEN_LIFE`
+
+`REFRESH_TOKEN_SECRET`
+
+`REFRESH_TOKEN_LIFE`
