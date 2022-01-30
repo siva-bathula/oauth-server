@@ -80,7 +80,7 @@ module.exports.authorize = (req, res) => {
             return reject(new InvalidArgumentError(401, 'Token expired.'));
         }
         if(expiredAccess) {
-            setAccessToken({ username: payload.username, password: payload.password }, res);
+            setBothTokens({ username: payload.username, password: payload.password }, res);
         } else {
             res.status(200).send('');
         }
