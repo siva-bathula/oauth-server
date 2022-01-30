@@ -1,12 +1,11 @@
 const jwt = require('jsonwebtoken');
-const InvalidArgumentError = require('../errors/invalid-argument-error');
-const users = require('../users/users');
+const InvalidArgumentError = require('./errors/invalid-argument-error');
+const users = require('./users/users');
 
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 const accessTokenLife = parseInt(process.env.ACCESS_TOKEN_LIFE);
 const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 const refreshTokenLife = parseInt(process.env.REFRESH_TOKEN_LIFE);
-const cookieExpiry = process.env.REFRESH_TOKEN_COOKIE_EXPIRY;
 
 module.exports.authenticate = (req, res) => {
     return new Promise((resolve, reject) => {
@@ -28,7 +27,7 @@ module.exports.authenticate = (req, res) => {
             if(user.password !== password) {
                 return reject(new InvalidArgumentError(403, `Password doesn't match for this username:`, username));
             }
-            getOrRefreshToken(user, res);
+            setBothTokens(user, res);
             return resolve(true);
         }
     });
@@ -81,7 +80,7 @@ module.exports.authorize = (req, res) => {
             return reject(new InvalidArgumentError(401, 'Token expired.'));
         }
         if(expiredAccess) {
-            getOrRefreshToken({ username: payload.username, password: payload.password }, res);
+            setAccessToken({ username: payload.username, password: payload.password }, res);
         } else {
             res.status(200).send('');
         }
@@ -89,8 +88,7 @@ module.exports.authorize = (req, res) => {
     });
 };
 
-function getOrRefreshToken(user, res) {
-    var token = getToken(user, accessTokenSecret, accessTokenLife);
+function setBothTokens(user, res) {
     var refreshToken = getToken(user, refreshTokenSecret, refreshTokenLife);
 
     let options = {
@@ -101,6 +99,11 @@ function getOrRefreshToken(user, res) {
     };
 
     res.cookie('refreshToken', refreshToken, options);
+    setAccessToken(user, res);
+}
+
+function setAccessToken(user, res) {
+    var token = getToken(user, accessTokenSecret, accessTokenLife);
     res.json({ jwt: token });
 }
 

@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const oAuth = require('./services/oauth');
+const oAuth = require('./oauth');
 const InvalidArgumentError = require('./errors/invalid-argument-error');
 
 const app = express();
