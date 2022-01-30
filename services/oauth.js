@@ -53,6 +53,7 @@ module.exports.authorize = (req, res) => {
         jwt.verify(tokenArray[1], accessTokenSecret, (err, verifiedJwt) => {
             if(err) {
                 if(err.name === 'TokenExpiredError') {
+                    console.log('Access token expired');
                     expiredAccess = true;
                     payload = jwt.verify(tokenArray[1], accessTokenSecret, { ignoreExpiration: true });
                 } else {
@@ -66,6 +67,7 @@ module.exports.authorize = (req, res) => {
         jwt.verify(cookie, refreshTokenSecret, (err, verifiedJwt) => {
             if(err) {
                 if(err.name === 'TokenExpiredError') {
+                    console.log('Refresh token expired');
                     expiredRefresh = true;
                     payload = jwt.verify(cookie, refreshTokenSecret, { ignoreExpiration: true });
                 } else {
