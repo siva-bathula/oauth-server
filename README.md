@@ -10,8 +10,8 @@ request is valid or not, and whether the user has access to a resource.
 The refresh token is sent in a cookie which will handle 
 the XSS attack problem, however CSRF is still possible. For further securing 
 the refresh token from CSRF attacks, an additional CSRF token
-can be added when using within a web application scenario, which can then be
-added to the headers. 
+should be used within a web application scenario, which can then be
+added to the headers in ajax and other requests. 
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
